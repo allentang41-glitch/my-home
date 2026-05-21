@@ -22,15 +22,6 @@
           />
         </div>
         <div class="item">
-          <span class="text">音乐点击是否打开面板</span>
-          <el-switch
-            v-model="musicClick"
-            inline-prompt
-            :active-icon="CheckSmall"
-            :inactive-icon="CloseSmall"
-          />
-        </div>
-        <div class="item">
           <span class="text">底栏歌词显示</span>
           <el-switch
             v-model="playerLrcShow"
@@ -95,7 +86,6 @@ const store = mainStore();
 const {
   coverType,
   siteStartShow,
-  musicClick,
   playerLrcShow,
   footerBlur,
   playerAutoplay,

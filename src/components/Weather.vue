@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { getAdcode, getWeather, getOtherWeather, getIpCity } from "@/api";
+import { getAdcode, getWeather, getOtherWeather, getIpCity, getOpenMeteo } from "@/api";
 import { Error } from "@icon-park/vue-next";
 
 // 高德开发者 Key
@@ -66,11 +66,28 @@ const getWeatherData = async () => {
         ipInfo = await getIpCity();
       }
       const cityName = fixedCity || ipInfo.city;
-      // 非中国 IP 不显示天气
+      // 非中国 IP 使用 Open-Meteo 全球天气
       if (ipInfo.countryCode && ipInfo.countryCode !== "CN") {
-        weatherData.adCode.city = "国外地区";
-        weatherData.weather.weather = "天气仅支持中国地区";
-        weatherData.weather.temperature = "";
+        if (ipInfo.lat && ipInfo.lon) {
+          try {
+            const om = await getOpenMeteo(ipInfo.lat, ipInfo.lon);
+            const cur = om.current_weather;
+            weatherData.adCode.city = ipInfo.city || "未知地区";
+            weatherData.weather.weather = cur.weathercode !== undefined ? getWeatherDesc(cur.weathercode, cur.temperature) : "";
+            weatherData.weather.temperature = cur.temperature !== undefined ? Math.round(cur.temperature) : "";
+            const windDir = getWindDir(cur.winddirection);
+            weatherData.weather.winddirection = windDir;
+            weatherData.weather.windpower = cur.windspeed !== undefined ? Math.round(cur.windspeed) : "";
+          } catch {
+            weatherData.adCode.city = ipInfo.city || "国外地区";
+            weatherData.weather.weather = "天气获取失败";
+            weatherData.weather.temperature = "";
+          }
+        } else {
+          weatherData.adCode.city = "国外地区";
+          weatherData.weather.weather = "天气获取失败";
+          weatherData.weather.temperature = "";
+        }
         weatherLoaded.value = true;
         return;
       }
@@ -127,6 +144,31 @@ const onError = (message) => {
     }),
   });
   console.error(message);
+};
+
+// Open-Meteo 天气代码转文字
+const getWeatherDesc = (code, temp) => {
+  const map = {
+    0: "晴天", 1: "少云", 2: "多云", 3: "阴天",
+    45: "雾", 48: "雾凇",
+    51: "小毛毛雨", 53: "毛毛雨", 55: "大毛毛雨",
+    56: "冻毛毛雨", 57: "冻毛毛雨",
+    61: "小雨", 63: "中雨", 65: "大雨",
+    66: "冻雨", 67: "冻雨",
+    71: "小雪", 73: "中雪", 75: "大雪",
+    77: "雪粒",
+    80: "阵雨", 81: "中阵雨", 82: "大阵雨",
+    85: "小阵雪", 86: "大阵雪",
+    95: "雷暴", 96: "雷暴+冰雹", 99: "雷暴+冰雹",
+  };
+  return map[code] || "未知";
+};
+
+// 风向角度转文字
+const getWindDir = (deg) => {
+  if (deg === undefined || deg === null) return "";
+  const dirs = ["北风", "东北风", "东风", "东南风", "南风", "西南风", "西风", "西北风"];
+  return dirs[Math.round(deg / 45) % 8];
 };
 
 onMounted(() => {

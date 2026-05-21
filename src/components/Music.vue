@@ -174,7 +174,14 @@ const maintainBuffer = async () => {
 // 从缓冲区播放
 const playFromBuffer = () => {
   if (buffer.length === 0) return;
-  const song = buffer.shift();
+  // 随机/顺序播放
+  let song;
+  if (store.playerOrder === "random") {
+    const idx = Math.floor(Math.random() * buffer.length);
+    song = buffer.splice(idx, 1)[0];
+  } else {
+    song = buffer.shift();
+  }
   if (!song) return;
 
   songName.value = song.name;
@@ -186,16 +193,18 @@ const playFromBuffer = () => {
   store.setPlayerLrc(song.name + " - " + song.artist);
   loading.value = false;
 
-  nextTick(() => {
-    if (audioRef.value) {
-      audioRef.value.play().then(() => {
-        isPlaying.value = true;
-        store.playerState = true;
-        // 播放后立即补充缓冲区
-        maintainBuffer();
-      }).catch(() => {});
-    }
-  });
+  // 自动播放
+  if (store.playerAutoplay) {
+    nextTick(() => {
+      if (audioRef.value) {
+        audioRef.value.play().then(() => {
+          isPlaying.value = true;
+          store.playerState = true;
+          maintainBuffer();
+        }).catch(() => {});
+      }
+    });
+  }
 };
 
 const nextSong = () => {
@@ -231,7 +240,26 @@ const onTimeUpdate = () => {
   store.setPlayerLrc(lrc);
 };
 
-const onEnded = () => { isPlaying.value = false; store.playerState = false; nextSong(); };
+const onEnded = () => {
+  isPlaying.value = false;
+  store.playerState = false;
+  if (store.playerLoop === "one") {
+    // 单曲循环：重新播放当前歌曲
+    if (audioRef.value) {
+      audioRef.value.currentTime = 0;
+      audioRef.value.play().then(() => {
+        isPlaying.value = true;
+        store.playerState = true;
+      }).catch(() => {});
+    }
+  } else if (store.playerLoop === "none") {
+    // 不循环：停止
+    store.setPlayerLrc("播放完毕");
+  } else {
+    // 列表循环：切到下一首
+    nextSong();
+  }
+};
 const onError = () => { isPlaying.value = false; store.playerState = false; };
 
 // 启动：预加载全部歌单，10秒后开始播放

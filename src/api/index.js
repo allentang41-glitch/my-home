@@ -58,10 +58,18 @@ export const getIpCity = async () => {
   try {
     const res = await fetch("http://ip-api.com/json/?lang=zh-CN");
     const data = await res.json();
-    return { city: data.city || null, countryCode: data.countryCode || null };
+    return { city: data.city || null, countryCode: data.countryCode || null, lat: data.lat, lon: data.lon };
   } catch {
-    return { city: null, countryCode: null };
+    return { city: null, countryCode: null, lat: null, lon: null };
   }
+};
+
+// 获取 Open-Meteo 全球天气
+export const getOpenMeteo = async (lat, lon) => {
+  const res = await fetch(
+    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`
+  );
+  return await res.json();
 };
 
 // 获取高德地理位置信息
