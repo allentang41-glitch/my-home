@@ -7,7 +7,7 @@
   "pnpm": {
     "onlyBuiltDependencies": ["esbuild", "vue-demi"]
   },
-  "version": "4.1.4",
+  "version": "5.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
