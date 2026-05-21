@@ -103,17 +103,6 @@ Configure songs in `src/assets/playlist.json`. Supports three formats:
 - **Lyrics** — displayed in the footer when playing
 - **Preload** — songs load in background, instant switching
 
-#### Wallpaper
-
-- **Middle-click** — toggle fullscreen wallpaper mode
-
-| Mode | Description |
-|---|---|
-| Default | Local images in `public/images/` |
-| Daily | [Bing daily wallpaper](https://api.dujin.org/bing/1920.php) |
-| Random Landscape | Landscape API |
-| Random Anime | Anime API |
-
 #### Weather
 
 Auto-detects your location via [ip-api.com](https://ip-api.com/). Uses [60s API](https://github.com/vikiboss/60s) for China, [Open-Meteo](https://open-meteo.com/) for overseas.

@@ -98,17 +98,6 @@ docker run -p 12445:12445 -d home
 - **预加载** — 打开网站后后台预加载，切歌秒切
 - **歌单配置** — 编辑 `src/assets/playlist.json` 增删歌曲
 
-#### 壁纸系统
-
-- **鼠标中键点击页面** — 切换全屏壁纸展示模式
-
-| 模式 | 说明 |
-|---|---|
-| 默认壁纸 | 本地图片，位于 `public/images/` |
-| 每日一图 | [Bing 每日壁纸](https://api.dujin.org/bing/1920.php) |
-| 随机风景 | 风景 API |
-| 随机动漫 | 动漫 API |
-
 #### 天气
 
 自动显示当前城市的实时天气。国内 IP 使用 [60s API](https://github.com/vikiboss/60s)，国外 IP 使用 [Open-Meteo](https://open-meteo.com/)。IP 定位服务来自 [ip-api.com](https://ip-api.com/)。
