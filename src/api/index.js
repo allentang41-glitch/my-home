@@ -56,6 +56,15 @@ export const getHitokoto = async () => {
 // 获取 IP 所在城市
 export const getIpCity = async () => {
   try {
+    // 优先用 ip-api.com（支持中文），失败则用 ipapi.co
+    const res = await fetch("http://ip-api.com/json/?lang=zh-CN");
+    const data = await res.json();
+    if (data.city) {
+      return { city: data.city, countryCode: data.countryCode, lat: data.lat, lon: data.lon };
+    }
+  } catch {}
+  // 回退：ipapi.co（支持 HTTPS）
+  try {
     const res = await fetch("https://ipapi.co/json/");
     const data = await res.json();
     return { city: data.city || null, countryCode: data.country_code || null, lat: data.latitude, lon: data.longitude };
@@ -69,5 +78,15 @@ export const getOpenMeteo = async (lat, lon) => {
   const res = await fetch(
     `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`
   );
+  return await res.json();
+};
+
+// 获取 60s 天气（国内）
+export const getOtherWeather = async (city) => {
+  const baseUrl = import.meta.env.VITE_WEATHER_URL || "https://api.oioweb.cn/api/weather/GetWeather";
+  const url = city
+    ? `${baseUrl}?query=${encodeURIComponent(city)}&encoding=utf-8`
+    : baseUrl;
+  const res = await fetch(url);
   return await res.json();
 };
