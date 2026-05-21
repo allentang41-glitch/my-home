@@ -3,9 +3,15 @@
 一个基于 Vue 的个人主页，支持天气、音乐播放器、一言、壁纸等功能。
 </p>
 
-> 本项目基于 [imsyy/home](https://github.com/imsyy/home) 修改，感谢原作者的出色工作。
+---
 
-![主页截图](/screenshots/main.jpg)
+[English](./README_EN.md) | 中文
+
+---
+
+### 项目说明
+
+本项目基于 [imsyy/home](https://github.com/imsyy/home) 修改，感谢原作者的出色工作。原项目采用 [MIT License](./LICENSE)，本项目同样遵循 MIT 协议。
 
 ### 功能
 
@@ -13,7 +19,7 @@
 - [x] 站点简介
 - [x] Hitokoto 一言
 - [x] 日期及时间
-- [x] 实时天气（支持 IP 自动定位）
+- [x] 实时天气（全球，IP 自动定位）
 - [x] 音乐播放器（支持歌单 / 歌曲 ID / 关键词搜索）
 - [x] 歌词同步显示
 - [x] 壁纸切换
@@ -90,19 +96,9 @@ docker run -p 12445:12445 -d home
 - **预加载** — 打开网站后后台预加载，切歌秒切
 - **歌单配置** — 编辑 `src/assets/playlist.json` 增删歌曲
 
-歌单支持三种格式：
-
-```json
-[
-  {"playlist": 392110972},      // 网易云歌单 ID
-  168091,                        // 单曲 ID
-  "晴天 周杰伦"                  // 关键词搜索
-]
-```
-
 #### 壁纸系统
 
-支持多种壁纸来源，可通过鼠标中键切换全屏展示：
+- **鼠标中键点击页面** — 切换全屏壁纸展示模式
 
 | 模式 | 说明 |
 |---|---|
@@ -111,44 +107,29 @@ docker run -p 12445:12445 -d home
 | 随机风景 | 在线随机风景图 |
 | 随机动漫 | 在线随机动漫图 |
 
-- **鼠标中键点击页面** — 切换全屏壁纸展示模式
-
 #### 天气
 
-自动显示当前城市的实时天气，包括温度、风向、风力。
+自动显示当前城市的实时天气。国内 IP 使用 60s API，国外 IP 使用 Open-Meteo。
 
-- 国内 IP 自动定位，国外 IP 显示"天气仅支持中国地区"
-- 也可在 `.env` 中手动指定 `VITE_WEATHER_CITY`
+- 可在 `.env` 中手动指定 `VITE_WEATHER_CITY`
 
 #### 网站链接
 
 右侧下方展示可自定义的网站导航，采用 Swiper 滑动翻页。
 
-- **左右滑动**（或鼠标滚轮）翻页
-- **点击图标** — 新标签页打开链接
 - 编辑 `src/assets/siteLinks.json` 自定义
 
 #### 社交链接
 
 左侧底部展示社交账号图标。
 
-- **鼠标悬停** — 显示提示文字
-- **点击图标** — 新标签页打开链接
 - 编辑 `src/assets/socialLinks.json` 自定义
 
 #### 页脚
 
 底部信息栏，显示版权信息、ICP 备案号，播放音乐时自动切换为歌词显示。
 
-#### 移动端适配
-
-- 屏幕宽度 **≤ 720px** 时自动切换移动端布局
-- 左下角菜单按钮用于切换左右区域
-- 站点名称在顶部居中显示
-
 ### 配置说明
-
-主要配置在项目根目录的 `.env` 文件中，以下为常用配置项：
 
 #### 站点信息
 
@@ -156,14 +137,7 @@ docker run -p 12445:12445 -d home
 VITE_SITE_NAME = "我的主页"        # 站点名称
 VITE_SITE_AUTHOR = "作者"          # 作者
 VITE_SITE_URL = "example.com"      # 站点域名
-VITE_SITE_ICP = "浙ICP备xxx号"     # ICP 备案号（可选）
-```
-
-#### 天气
-
-```bash
-VITE_WEATHER_URL = "http://60sapi.eu.cc/v2/weather"
-VITE_WEATHER_CITY = ""             # 手动指定城市，留空则自动定位
+VITE_SITE_ICP = ""                 # ICP 备案号（可选）
 ```
 
 #### 歌单
@@ -172,15 +146,15 @@ VITE_WEATHER_CITY = ""             # 手动指定城市，留空则自动定位
 
 ```json
 [
-  {"playlist": 392110972},
-  168091,
-  "关键词 歌手名"
+  {"playlist": 392110972},      // 网易云歌单 ID
+  168091,                        // 单曲 ID
+  "关键词 歌手名"                // 关键词搜索
 ]
 ```
 
 #### 网站链接
 
-编辑 `src/assets/siteLinks.json` 自定义导航网站列表：
+编辑 `src/assets/siteLinks.json`：
 
 ```json
 [
@@ -192,11 +166,9 @@ VITE_WEATHER_CITY = ""             # 手动指定城市，留空则自动定位
 ]
 ```
 
-图标名称可前往 [xicons](https://www.xicons.org) 挑选，在 `src/components/Links.vue` 中引入即可。
-
 #### 社交链接
 
-编辑 `src/assets/socialLinks.json` 自定义社交账号链接：
+编辑 `src/assets/socialLinks.json`：
 
 ```json
 [
@@ -209,15 +181,29 @@ VITE_WEATHER_CITY = ""             # 手动指定城市，留空则自动定位
 ]
 ```
 
-### 自定义壁纸
+### 开源致谢
 
-将壁纸图片放入 `public/images/` 目录，命名为 `background1.jpg` ~ `background10.jpg`，代码会自动随机选取。
+本项目使用了以下开源项目和 API 服务：
 
-若需修改壁纸来源数量，编辑 `src/components/Background.vue`：
-
-```js
-const bgRandom = Math.floor(Math.random() * 10 + 1); // 10 为图片数量
-```
+| 项目 | 用途 | 许可 |
+|---|---|---|
+| [imsyy/home](https://github.com/imsyy/home) | 原项目基底 | MIT |
+| [Vue 3](https://vuejs.org/) | 前端框架 | MIT |
+| [Vite](https://vitejs.dev/) | 构建工具 | MIT |
+| [Pinia](https://pinia.vuejs.org/) | 状态管理 | MIT |
+| [Element Plus](https://element-plus.org/) | UI 组件库 | MIT |
+| [Swiper](https://swiperjs.com/) | 滑动组件 | MIT |
+| [Sass](https://sass-lang.com/) | CSS 预处理器 | MIT |
+| [IconPark](https://iconpark.oceanengine.com/) | 图标库 | Apache 2.0 |
+| [Vicons](https://xicons.org/) | 图标库 | MIT |
+| [Aplayer](https://aplayer.js.org/) | 音乐播放器（未启用） | MIT |
+| [HarmonyOS Sans](https://developer.harmonyos.com/) | 字体 | 华为开源 |
+| [Pacifico](https://fonts.google.com/specimen/Pacifico) | Logo 字体 | SIL OFL |
+| [hitokoto.cn](https://hitokoto.cn/) | 一言 API | 免费 API |
+| [ip-api.com](https://ip-api.com/) | IP 定位 | 非商业免费 |
+| [Open-Meteo](https://open-meteo.com/) | 全球天气 API | 免费开源 |
+| [Meting API](https://api.injahow.cn/meting/) | 音乐信息 API | 免费 API |
+| [60s API](https://github.com/vikiboss/60s) | 国内天气源 | MIT |
 
 ### 技术栈
 

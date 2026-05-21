@@ -3,9 +3,15 @@
 A Vue-based personal homepage with weather, music player, Hitokoto quotes, wallpaper, and more.
 </p>
 
-> This project is based on [imsyy/home](https://github.com/imsyy/home), thanks to the original author for the great work.
+---
 
-![Screenshot](/screenshots/main.jpg)
+English | [中文](./README.md)
+
+---
+
+### About
+
+This project is based on [imsyy/home](https://github.com/imsyy/home), licensed under [MIT](./LICENSE).
 
 ### Features
 
@@ -13,7 +19,7 @@ A Vue-based personal homepage with weather, music player, Hitokoto quotes, wallp
 - [x] Site description
 - [x] Hitokoto quotes
 - [x] Date and time
-- [x] Live weather (auto IP location)
+- [x] Live weather (global, auto IP location)
 - [x] Music player (playlist / song ID / keyword search)
 - [x] Sync lyrics display
 - [x] Wallpaper switching
@@ -34,7 +40,7 @@ pnpm install
 pnpm build
 ```
 
-Upload the `dist` directory to your web server (Nginx, Apache, etc.).
+Upload the `dist` directory to your web server.
 
 #### Docker Deployment
 
@@ -69,39 +75,35 @@ docker run -p 12445:12445 -d home
 
 4. Click **Save and Deploy**
 
-> Note: `.env` settings won't sync automatically. Add them manually in the platform's environment variables.
-
 ### Usage
 
 #### Hitokoto
 
-Random quote displayed in the center. Powered by [hitokoto.cn](https://hitokoto.cn/).
+Powered by [hitokoto.cn](https://hitokoto.cn/).
 
-- **Click the text** — refresh to a new quote
+- **Click** — refresh to a new quote
 - **Hover** — shows "Open Music Player" button
 
 #### Music Player
 
-Supports playlist ID, song ID, and keyword search. Configure songs in `src/assets/playlist.json`.
+Configure songs in `src/assets/playlist.json`. Supports three formats:
+
+```json
+[
+  {"playlist": 392110972},
+  168091,
+  "keyword artist"
+]
+```
 
 - **Play/Pause** — click the center button
 - **Next/Previous** — click the side buttons
 - **Lyrics** — displayed in the footer when playing
 - **Preload** — songs load in background, instant switching
 
-Three formats supported:
-
-```json
-[
-  {"playlist": 392110972},      // Netease playlist ID
-  168091,                        // Song ID
-  "keyword artist"               // Search keyword
-]
-```
-
 #### Wallpaper
 
-Switch wallpaper sources:
+- **Middle-click** — toggle fullscreen wallpaper mode
 
 | Mode | Description |
 |---|---|
@@ -110,44 +112,19 @@ Switch wallpaper sources:
 | Random Landscape | Online random landscape |
 | Random Anime | Online random anime |
 
-- **Middle-click** — toggle fullscreen wallpaper mode
-
 #### Weather
 
-Auto-displays real-time weather for your location.
-
-- Auto IP location for China; shows "China only" for overseas IPs
-- Set `VITE_WEATHER_CITY` in `.env` for a fixed city
+Auto-detects your location via IP. Uses 60s API for China, Open-Meteo for overseas.
 
 #### Site Links
 
-Customizable navigation links with Swiper pagination.
-
-- **Swipe** (or mouse wheel) to turn pages
-- **Click** to open link in new tab
-- Edit `src/assets/siteLinks.json`
+Edit `src/assets/siteLinks.json`.
 
 #### Social Links
 
-Social media icons at bottom left.
-
-- **Hover** — shows tooltip
-- **Click** to open link in new tab
-- Edit `src/assets/socialLinks.json`
-
-#### Footer
-
-Shows copyright, ICP filing info. Switches to lyrics display when music is playing.
-
-#### Mobile Support
-
-- Auto-switches to mobile layout when **width ≤ 720px**
-- Menu button at bottom left to toggle left/right panels
-- Site name centered at top
+Edit `src/assets/socialLinks.json`.
 
 ### Configuration
-
-Main configuration is in `.env`. Common settings:
 
 #### Site Info
 
@@ -155,14 +132,6 @@ Main configuration is in `.env`. Common settings:
 VITE_SITE_NAME = "My Homepage"
 VITE_SITE_AUTHOR = "Author"
 VITE_SITE_URL = "example.com"
-VITE_SITE_ICP = ""            # ICP filing (optional)
-```
-
-#### Weather
-
-```bash
-VITE_WEATHER_URL = "http://60sapi.eu.cc/v2/weather"
-VITE_WEATHER_CITY = ""        # Manual city, leave empty for auto-detect
 ```
 
 #### Playlist
@@ -179,8 +148,6 @@ Edit `src/assets/playlist.json`:
 
 #### Site Links
 
-Edit `src/assets/siteLinks.json`:
-
 ```json
 [
   {
@@ -193,8 +160,6 @@ Edit `src/assets/siteLinks.json`:
 
 #### Social Links
 
-Edit `src/assets/socialLinks.json`:
-
 ```json
 [
   {
@@ -206,15 +171,27 @@ Edit `src/assets/socialLinks.json`:
 ]
 ```
 
-### Custom Wallpaper
+### Open Source Acknowledgments
 
-Place images in `public/images/` as `background1.jpg` ~ `background10.jpg`.
-
-Edit the count in `src/components/Background.vue`:
-
-```js
-const bgRandom = Math.floor(Math.random() * 10 + 1);
-```
+| Project | Usage | License |
+|---|---|---|
+| [imsyy/home](https://github.com/imsyy/home) | Base project | MIT |
+| [Vue 3](https://vuejs.org/) | Frontend framework | MIT |
+| [Vite](https://vitejs.dev/) | Build tool | MIT |
+| [Pinia](https://pinia.vuejs.org/) | State management | MIT |
+| [Element Plus](https://element-plus.org/) | UI components | MIT |
+| [Swiper](https://swiperjs.com/) | Swipe component | MIT |
+| [Sass](https://sass-lang.com/) | CSS preprocessor | MIT |
+| [IconPark](https://iconpark.oceanengine.com/) | Icons | Apache 2.0 |
+| [Vicons](https://xicons.org/) | Icons | MIT |
+| [Aplayer](https://aplayer.js.org/) | Music player (unused) | MIT |
+| [HarmonyOS Sans](https://developer.harmonyos.com/) | Font | Huawei Open |
+| [Pacifico](https://fonts.google.com/specimen/Pacifico) | Logo font | SIL OFL |
+| [hitokoto.cn](https://hitokoto.cn/) | Hitokoto API | Free API |
+| [ip-api.com](https://ip-api.com/) | IP geolocation | Non-commercial |
+| [Open-Meteo](https://open-meteo.com/) | Global weather | Open source |
+| [Meting API](https://api.injahow.cn/meting/) | Music metadata | Free API |
+| [60s API](https://github.com/vikiboss/60s) | China weather | MIT |
 
 ### Tech Stack
 
