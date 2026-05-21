@@ -53,12 +53,12 @@ export const getHitokoto = async () => {
  * 天气
  */
 
-// 获取 IP 所在城市（返回中文城市名）
+// 获取 IP 所在城市
 export const getIpCity = async () => {
   try {
-    const res = await fetch("https://ip-api.com/json/?lang=zh-CN");
+    const res = await fetch("https://ipapi.co/json/");
     const data = await res.json();
-    return { city: data.city || null, countryCode: data.countryCode || null, lat: data.lat, lon: data.lon };
+    return { city: data.city || null, countryCode: data.country_code || null, lat: data.latitude, lon: data.longitude };
   } catch {
     return { city: null, countryCode: null, lat: null, lon: null };
   }
@@ -69,30 +69,5 @@ export const getOpenMeteo = async (lat, lon) => {
   const res = await fetch(
     `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`
   );
-  return await res.json();
-};
-
-// 获取高德地理位置信息
-export const getAdcode = async (key) => {
-  const res = await fetch(`https://restapi.amap.com/v3/ip?key=${key}`);
-  return await res.json();
-};
-
-// 获取高德地理天气信息
-export const getWeather = async (key, city) => {
-  const res = await fetch(
-    `https://restapi.amap.com/v3/weather/weatherInfo?key=${key}&city=${city}`,
-  );
-  return await res.json();
-};
-
-// 获取自定义天气 API
-// 60sapi.eu.cc/v2/weather
-export const getOtherWeather = async (city) => {
-  const baseUrl = import.meta.env.VITE_WEATHER_URL || "https://api.oioweb.cn/api/weather/GetWeather";
-  const url = city
-    ? `${baseUrl}?query=${encodeURIComponent(city)}&encoding=utf-8`
-    : baseUrl;
-  const res = await fetch(url);
   return await res.json();
 };
