@@ -56,7 +56,7 @@ export const getHitokoto = async () => {
 // 获取 IP 所在城市（返回中文城市名）
 export const getIpCity = async () => {
   try {
-    const res = await fetch("http://ip-api.com/json/?lang=zh-CN");
+    const res = await fetch("https://ip-api.com/json/?lang=zh-CN");
     const data = await res.json();
     return { city: data.city || null, countryCode: data.countryCode || null, lat: data.lat, lon: data.lon };
   } catch {
