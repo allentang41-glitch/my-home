@@ -86,6 +86,8 @@ Powered by [hitokoto.cn](https://hitokoto.cn/).
 
 #### Music Player
 
+Powered by [Meting API](https://api.injahow.cn/meting/) and [gdstudio Music API](https://music-api.gdstudio.xyz/).
+
 Configure songs in `src/assets/playlist.json`. Supports three formats:
 
 ```json
@@ -108,13 +110,13 @@ Configure songs in `src/assets/playlist.json`. Supports three formats:
 | Mode | Description |
 |---|---|
 | Default | Local images in `public/images/` |
-| Daily | Bing daily wallpaper |
-| Random Landscape | Online random landscape |
-| Random Anime | Online random anime |
+| Daily | [Bing daily wallpaper](https://api.dujin.org/bing/1920.php) |
+| Random Landscape | Landscape API |
+| Random Anime | Anime API |
 
 #### Weather
 
-Auto-detects your location via IP. Uses 60s API for China, Open-Meteo for overseas.
+Auto-detects your location via [ip-api.com](https://ip-api.com/). Uses [60s API](https://github.com/vikiboss/60s) for China, [Open-Meteo](https://open-meteo.com/) for overseas.
 
 #### Site Links
 
@@ -170,28 +172,6 @@ Edit `src/assets/playlist.json`:
   }
 ]
 ```
-
-### Open Source Acknowledgments
-
-| Project | Usage | License |
-|---|---|---|
-| [imsyy/home](https://github.com/imsyy/home) | Base project | MIT |
-| [Vue 3](https://vuejs.org/) | Frontend framework | MIT |
-| [Vite](https://vitejs.dev/) | Build tool | MIT |
-| [Pinia](https://pinia.vuejs.org/) | State management | MIT |
-| [Element Plus](https://element-plus.org/) | UI components | MIT |
-| [Swiper](https://swiperjs.com/) | Swipe component | MIT |
-| [Sass](https://sass-lang.com/) | CSS preprocessor | MIT |
-| [IconPark](https://iconpark.oceanengine.com/) | Icons | Apache 2.0 |
-| [Vicons](https://xicons.org/) | Icons | MIT |
-| [Aplayer](https://aplayer.js.org/) | Music player (unused) | MIT |
-| [HarmonyOS Sans](https://developer.harmonyos.com/) | Font | Huawei Open |
-| [Pacifico](https://fonts.google.com/specimen/Pacifico) | Logo font | SIL OFL |
-| [hitokoto.cn](https://hitokoto.cn/) | Hitokoto API | Free API |
-| [ip-api.com](https://ip-api.com/) | IP geolocation | Non-commercial |
-| [Open-Meteo](https://open-meteo.com/) | Global weather | Open source |
-| [Meting API](https://api.injahow.cn/meting/) | Music metadata | Free API |
-| [60s API](https://github.com/vikiboss/60s) | China weather | MIT |
 
 ### Tech Stack
 

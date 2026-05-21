@@ -88,6 +88,8 @@ docker run -p 12445:12445 -d home
 
 #### 音乐播放器
 
+基于 [Meting API](https://api.injahow.cn/meting/) 获取歌曲信息，音频来自 [gdstudio 音乐 API](https://music-api.gdstudio.xyz/)。
+
 支持歌单 ID、歌曲 ID、关键词三种方式搜歌。歌单配置在 `src/assets/playlist.json`。
 
 - **播放/暂停** — 点击中央的播放/暂停按钮
@@ -103,19 +105,19 @@ docker run -p 12445:12445 -d home
 | 模式 | 说明 |
 |---|---|
 | 默认壁纸 | 本地图片，位于 `public/images/` |
-| 每日一图 | Bing 每日壁纸 |
-| 随机风景 | 在线随机风景图 |
-| 随机动漫 | 在线随机动漫图 |
+| 每日一图 | [Bing 每日壁纸](https://api.dujin.org/bing/1920.php) |
+| 随机风景 | 风景 API |
+| 随机动漫 | 动漫 API |
 
 #### 天气
 
-自动显示当前城市的实时天气。国内 IP 使用 60s API，国外 IP 使用 Open-Meteo。
+自动显示当前城市的实时天气。国内 IP 使用 [60s API](https://github.com/vikiboss/60s)，国外 IP 使用 [Open-Meteo](https://open-meteo.com/)。IP 定位服务来自 [ip-api.com](https://ip-api.com/)。
 
 - 可在 `.env` 中手动指定 `VITE_WEATHER_CITY`
 
 #### 网站链接
 
-右侧下方展示可自定义的网站导航，采用 Swiper 滑动翻页。
+右侧下方展示可自定义的网站导航，采用 [Swiper](https://swiperjs.com/) 滑动翻页。
 
 - 编辑 `src/assets/siteLinks.json` 自定义
 
@@ -180,30 +182,6 @@ VITE_SITE_ICP = ""                 # ICP 备案号（可选）
   }
 ]
 ```
-
-### 开源致谢
-
-本项目使用了以下开源项目和 API 服务：
-
-| 项目 | 用途 | 许可 |
-|---|---|---|
-| [imsyy/home](https://github.com/imsyy/home) | 原项目基底 | MIT |
-| [Vue 3](https://vuejs.org/) | 前端框架 | MIT |
-| [Vite](https://vitejs.dev/) | 构建工具 | MIT |
-| [Pinia](https://pinia.vuejs.org/) | 状态管理 | MIT |
-| [Element Plus](https://element-plus.org/) | UI 组件库 | MIT |
-| [Swiper](https://swiperjs.com/) | 滑动组件 | MIT |
-| [Sass](https://sass-lang.com/) | CSS 预处理器 | MIT |
-| [IconPark](https://iconpark.oceanengine.com/) | 图标库 | Apache 2.0 |
-| [Vicons](https://xicons.org/) | 图标库 | MIT |
-| [Aplayer](https://aplayer.js.org/) | 音乐播放器（未启用） | MIT |
-| [HarmonyOS Sans](https://developer.harmonyos.com/) | 字体 | 华为开源 |
-| [Pacifico](https://fonts.google.com/specimen/Pacifico) | Logo 字体 | SIL OFL |
-| [hitokoto.cn](https://hitokoto.cn/) | 一言 API | 免费 API |
-| [ip-api.com](https://ip-api.com/) | IP 定位 | 非商业免费 |
-| [Open-Meteo](https://open-meteo.com/) | 全球天气 API | 免费开源 |
-| [Meting API](https://api.injahow.cn/meting/) | 音乐信息 API | 免费 API |
-| [60s API](https://github.com/vikiboss/60s) | 国内天气源 | MIT |
 
 ### 技术栈
 
