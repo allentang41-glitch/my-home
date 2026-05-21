@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { getIpCity, getOtherWeather, getOpenMeteo } from "@/api";
+import { getOpenMeteo } from "@/api";
 import { Error } from "@icon-park/vue-next";
 import { h } from "vue";
 
@@ -50,46 +50,32 @@ const getWindDir = (deg) => {
 
 const getWeatherData = async () => {
   try {
-    const ipInfo = await getIpCity();
-
-    // 国内用 60s API，国外用 Open-Meteo
-    if (ipInfo.countryCode === "CN") {
-      const fixedCity = import.meta.env.VITE_WEATHER_CITY;
-      const cityName = fixedCity || ipInfo.city;
-      if (cityName) {
-        const result = await getOtherWeather(cityName);
-        if (result.code === 200 && result.data) {
-          const d = result.data;
-          weatherData.adCode.city = d.location.city || cityName;
-          weatherData.weather.weather = d.weather.condition;
-          weatherData.weather.temperature = d.weather.temperature;
-          weatherData.weather.winddirection = d.weather.wind_direction;
-          weatherData.weather.windpower = d.weather.wind_power;
-          weatherLoaded.value = true;
-          return;
-        }
-      }
+    let city = null, lat = null, lon = null;
+    try {
+      const res = await fetch("http://ip-api.com/json/?lang=zh-CN");
+      const data = await res.json();
+      if (data.city) { city = data.city; lat = data.lat; lon = data.lon; }
+    } catch {}
+    if (!lat || !lon) {
+      const res = await fetch("https://ipapi.co/json/");
+      const data = await res.json();
+      city = data.city || null;
+      lat = data.latitude || null;
+      lon = data.longitude || null;
     }
-
-    // 国外或国内 API 失败，用 Open-Meteo
-    if (ipInfo.lat && ipInfo.lon) {
-      const om = await getOpenMeteo(ipInfo.lat, ipInfo.lon);
+    if (lat && lon) {
+      const om = await getOpenMeteo(lat, lon);
       const cur = om.current_weather;
-      weatherData.adCode.city = ipInfo.city || "Unknown";
+      weatherData.adCode.city = city || "未知";
       weatherData.weather.weather = cur.weathercode !== undefined ? getWeatherDesc(cur.weathercode) : "";
       weatherData.weather.temperature = cur.temperature !== undefined ? Math.round(cur.temperature) : "";
       weatherData.weather.winddirection = getWindDir(cur.winddirection);
       weatherData.weather.windpower = cur.windspeed !== undefined ? Math.round(cur.windspeed) + "" : "";
-    } else {
-      weatherData.adCode.city = "Unknown";
-      weatherData.weather.weather = "Unable to fetch weather";
-      weatherData.weather.temperature = "";
     }
     weatherLoaded.value = true;
   } catch (error) {
     console.error("Weather failed:" + error);
     weatherLoaded.value = true;
-    ElMessage({ message: "天气获取失败", icon: h(Error, { theme: "filled", fill: "#efefef" }) });
   }
 };
 

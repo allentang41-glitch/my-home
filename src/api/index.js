@@ -80,13 +80,3 @@ export const getOpenMeteo = async (lat, lon) => {
   );
   return await res.json();
 };
-
-// 获取 60s 天气（国内）
-export const getOtherWeather = async (city) => {
-  const baseUrl = import.meta.env.VITE_WEATHER_URL || "https://api.oioweb.cn/api/weather/GetWeather";
-  const url = city
-    ? `${baseUrl}?query=${encodeURIComponent(city)}&encoding=utf-8`
-    : baseUrl;
-  const res = await fetch(url);
-  return await res.json();
-};
