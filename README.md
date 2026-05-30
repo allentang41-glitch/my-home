@@ -58,7 +58,7 @@ docker run -p 12445:12445 -d yunlong88/my-home:latest
 docker build -t my-home .
 
 # 运行容器
-docker run -p 12445:12445 -d my-home
+docker run -p 12445:80 -d my-home
 ```
 
 #### Vercel 部署
