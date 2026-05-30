@@ -44,12 +44,21 @@ pnpm build
 
 #### Docker 部署
 
+使用官方预构建镜像：
+
+```bash
+docker pull yunlong88/my-home:latest
+docker run -p 12445:12445 -d yunlong88/my-home:latest
+```
+
+自行构建镜像：
+
 ```bash
 # 构建镜像
-docker build -t home .
+docker build -t my-home .
 
 # 运行容器
-docker run -p 12445:12445 -d home
+docker run -p 12445:12445 -d my-home
 ```
 
 #### Vercel 部署
