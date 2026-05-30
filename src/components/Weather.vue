@@ -15,8 +15,6 @@
 
 <script setup>
 import { getOpenMeteo } from "@/api";
-import { Error } from "@icon-park/vue-next";
-import { h } from "vue";
 
 const weatherLoaded = ref(false);
 
@@ -48,47 +46,27 @@ const getWindDir = (deg) => {
   return dirs[Math.round(deg / 45) % 8];
 };
 
-// 英文城市名 → 中文映射
-const cnCityMap = {
-  "Beijing": "北京", "Shanghai": "上海", "Guangzhou": "广州", "Shenzhen": "深圳",
-  "Hangzhou": "杭州", "Nanjing": "南京", "Chengdu": "成都", "Wuhan": "武汉",
-  "Chongqing": "重庆", "Tianjin": "天津", "Shenyang": "沈阳", "Dalian": "大连",
-  "Xi'an": "西安", "Changsha": "长沙", "Zhengzhou": "郑州", "Jinan": "济南",
-  "Qingdao": "青岛", "Xiamen": "厦门", "Fuzhou": "福州", "Hefei": "合肥",
-  "Kunming": "昆明", "Guiyang": "贵阳", "Nanning": "南宁", "Haikou": "海口",
-  "Lanzhou": "兰州", "Lhasa": "拉萨", "Yinchuan": "银川", "Xining": "西宁",
-  "Taiyuan": "太原", "Shijiazhuang": "石家庄", "Harbin": "哈尔滨", "Changchun": "长春",
-  "Suzhou": "苏州", "Wuxi": "无锡", "Ningbo": "宁波", "Wenzhou": "温州",
-  "Dongguan": "东莞", "Foshan": "佛山", "Zhuhai": "珠海", "Huizhou": "惠州",
-  "Zhongshan": "中山", "Shantou": "汕头", "Zhanjiang": "湛江", "Zhuzhou": "株洲",
-  "Yangzhou": "扬州", "Zhenjiang": "镇江", "Nantong": "南通", "Xuzhou": "徐州",
-  "Changzhou": "常州", "Jiaxing": "嘉兴", "Shaoxing": "绍兴", "Jinhua": "金华",
-  "Taizhou_ZJ": "台州", "Huzhou": "湖州", "Zhoushan": "舟山", "Lishui": "丽水",
-  "Quanzhou": "泉州", "Zhangzhou": "漳州", "Guilin": "桂林", "Liuzhou": "柳州",
-  "Baoding": "保定", "Tangshan": "唐山", "Qinhuangdao": "秦皇岛", "Handan": "邯郸",
-  "Yantai": "烟台", "Weihai": "威海", "Rizhao": "日照", "Linyi": "临沂",
-  "Luoyang": "洛阳", "Kaifeng": "开封", "Anyang": "安阳", "Xiangyang": "襄阳",
-  "Yichang": "宜昌", "Jingzhou": "荆州", "Yuyao": "余姚", "Cixi": "慈溪",
-};
-
 const getWeatherData = async () => {
   try {
     let city = null, lat = null, lon = null;
-    try {
-      const res = await fetch("http://ip-api.com/json/?lang=zh-CN");
-      const data = await res.json();
-      if (data.city) { city = data.city; lat = data.lat; lon = data.lon; }
-    } catch {}
-    if (!lat || !lon) {
-      const res = await fetch("https://ipinfo.io/json");
-      const data = await res.json();
-      if (data.loc) {
-        const [lati, loni] = data.loc.split(",");
-        lat = parseFloat(lati);
-        lon = parseFloat(loni);
-      }
-      city = cnCityMap[data.city] || data.city || null;
+
+    // .env 中指定了城市则优先使用
+    const fixedCity = import.meta.env.VITE_WEATHER_CITY;
+    if (fixedCity) {
+      city = fixedCity;
     }
+
+    // 用 ip.nc.gy 获取 IP 定位（HTTPS，中文名）
+    try {
+      const res = await fetch("https://ip.nc.gy/json");
+      const data = await res.json();
+      city = data.city?.names?.["zh-CN"] || data.city?.names?.en || null;
+      if (data.location) {
+        lat = data.location.latitude;
+        lon = data.location.longitude;
+      }
+    } catch {}
+
     if (lat && lon) {
       const om = await getOpenMeteo(lat, lon);
       const cur = om.current_weather;
